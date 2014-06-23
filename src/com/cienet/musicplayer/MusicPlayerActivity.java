@@ -7,9 +7,9 @@ import android.view.MenuItem;
 
 public class MusicPlayerActivity extends Activity {
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_music_player);
-  }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_music_player);
+	}
 }
