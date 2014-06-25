@@ -60,12 +60,12 @@ public class MainViewActivity extends Activity {
 		view2 = lf.inflate(R.layout.layout2, null);
 		view3 = lf.inflate(R.layout.layout3, null);
 
-		viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
+		viewList = new ArrayList<View>();
 		viewList.add(view1);
 		viewList.add(view2);
 		viewList.add(view3);
 
-		titleList = new ArrayList<String>();// 每个页面的Title数据
+		titleList = new ArrayList<String>();
 		titleList.add("text");
 		titleList.add("alum");
 		titleList.add("songs");
