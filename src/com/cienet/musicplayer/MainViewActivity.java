@@ -53,16 +53,7 @@ public class MainViewActivity extends Activity {
 		view1 = lf.inflate(R.layout.layout1, null);
 		view2 = lf.inflate(R.layout.layout2, null);
 		view3 = lf.inflate(R.layout.music_list, null);
-
-		viewList = new ArrayList<View>();
-		viewList.add(view1);
-		viewList.add(view2);
-		viewList.add(view3);
-
-		titleList = new ArrayList<String>();
-		titleList.add("text");
-		titleList.add("alum");
-		titleList.add("songs");
+		
 		//绑定Layout里面的ListView
         listView = (ListView) (lf.inflate(R.layout.music_list, null)).findViewById(R.id.ListView01);
         //listView = (ListView) findViewById(R.id.ListView01);
@@ -70,6 +61,17 @@ public class MainViewActivity extends Activity {
         //显示ListView  
         initListAllSongs();  
         showByMyBaseAdapter();
+
+		viewList = new ArrayList<View>();
+		viewList.add(view1);
+		viewList.add(view2);
+		viewList.add(listView);
+
+		titleList = new ArrayList<String>();
+		titleList.add("text");
+		titleList.add("alum");
+		titleList.add("songs");
+		
 
 		PagerAdapter pagerAdapter = new PagerAdapter() {
 
@@ -106,8 +108,21 @@ public class MainViewActivity extends Activity {
 
 			@Override
 			public Object instantiateItem(ViewGroup container, int position) {
-				container.addView(viewList.get(position));
-				return viewList.get(position);
+	            try { 
+	                if(viewList.get(position).getParent()==null)
+	                    ((ViewPager) container).addView(viewList.get(position), 0);  
+	                else{
+	                    //  很难理解新添加进来的view会自动绑定一个父类，由于一个儿子view不能与两个父类相关，所以得解绑
+	                    //不这样做否则会产生 viewpager java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
+	                    // 还有一种方法是viewPager.setOffscreenPageLimit(3); 这种方法不用判断parent 是不是已经存在，但多余的listview不能被destroy
+	                    ((ViewGroup)viewList.get(position).getParent()).removeView(viewList.get(position));
+	                    ((ViewPager) container).addView(viewList.get(position), 0); 
+	                }
+	            } catch (Exception e) {  
+	                // TODO Auto-generated catch block  
+	                e.printStackTrace();  
+	            }  
+	            return viewList.get(position);
 			}
 
 		};
