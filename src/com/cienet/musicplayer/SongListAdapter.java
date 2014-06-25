@@ -14,16 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MyBaseAdapter extends BaseAdapter {
+public class SongListAdapter extends BaseAdapter {
 
 	private List<Song> songs;
 	Context context;
 
-	public MyBaseAdapter() {
+	public SongListAdapter() {
 		super();
 	}
 
-	public MyBaseAdapter(Context context, List<Song> songs) {
+	public SongListAdapter(Context context, List<Song> songs) {
 		super();
 		this.songs = songs;
 		this.context = context;

@@ -35,7 +35,7 @@ public class MusicListActivity extends Activity {
 	}
 	
 	public void showByMyBaseAdapter(){
-		adapter = new MyBaseAdapter(this, songs);  
+		adapter = new SongListAdapter(this, songs);  
         listView.setAdapter(adapter);
 	}
 }

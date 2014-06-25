@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
 encoding//src/com/cienet/musicplayer/MainViewActivity.java=GBK
 encoding//src/com/cienet/musicplayer/MusicListActivity.java=UTF-8
-encoding//src/com/cienet/musicplayer/MyBaseAdapter.java=UTF-8
 encoding//src/com/cienet/musicplayer/Song.java=UTF-8
+encoding//src/com/cienet/musicplayer/SongListAdapter.java=UTF-8

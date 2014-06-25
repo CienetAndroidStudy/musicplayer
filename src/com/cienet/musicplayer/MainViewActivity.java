@@ -1,28 +1,19 @@
 package com.cienet.musicplayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 public class MainViewActivity extends Activity {
 
@@ -31,13 +22,16 @@ public class MainViewActivity extends Activity {
 	private PagerTabStrip pagerTabStrip;
 	private List<View> viewList;
 	private List<String> titleList;
+	List<Song> songs ;  
+	ListAdapter adapter = null;  
+	ListView listView = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view_pager);
 
-		initView();
+        initView();
 
 	}
 
@@ -53,12 +47,12 @@ public class MainViewActivity extends Activity {
 
 		view1 = findViewById(R.layout.layout1);
 		view2 = findViewById(R.layout.layout2);
-		view3 = findViewById(R.layout.layout3);
+		view3 = findViewById(R.layout .music_list);
 
-		LayoutInflater lf = getLayoutInflater().from(this);
+		LayoutInflater lf = getLayoutInflater();
 		view1 = lf.inflate(R.layout.layout1, null);
 		view2 = lf.inflate(R.layout.layout2, null);
-		view3 = lf.inflate(R.layout.layout3, null);
+		view3 = lf.inflate(R.layout.music_list, null);
 
 		viewList = new ArrayList<View>();
 		viewList.add(view1);
@@ -69,6 +63,13 @@ public class MainViewActivity extends Activity {
 		titleList.add("text");
 		titleList.add("alum");
 		titleList.add("songs");
+		//绑定Layout里面的ListView
+        listView = (ListView) (lf.inflate(R.layout.music_list, null)).findViewById(R.id.ListView01);
+        //listView = (ListView) findViewById(R.id.ListView01);
+        
+        //显示ListView  
+        initListAllSongs();  
+        showByMyBaseAdapter();
 
 		PagerAdapter pagerAdapter = new PagerAdapter() {
 
@@ -118,5 +119,17 @@ public class MainViewActivity extends Activity {
 		// getMenuInflater().inflate(R.menu.activity_view_pager_demo, menu);
 		return true;
 	}
+	
+	public void initListAllSongs(){
+        songs = new ArrayList<Song>();
+        for(int i=10;i<30;i++){
+            songs.add(new Song("歌曲"+i,"专辑"+i,R.drawable.ic_action_favorite));
+        }
+    }
+    
+    public void showByMyBaseAdapter(){
+        adapter = new SongListAdapter(this, songs);  
+        listView.setAdapter(adapter);
+    }
 
 }
