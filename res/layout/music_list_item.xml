@@ -8,24 +8,26 @@
     android:paddingRight="12dip" >
 
     <ImageView
-        android:id="@+id/ItemImage"
+        android:id="@+id/song_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:paddingTop="12dip" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/song_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="TextView01"
+        android:textColor="@color/white"
         android:textSize="20dip" />
 
     <TextView
-        android:id="@+id/album"
+        android:id="@+id/song_album"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
-        android:text="TextView02" />
+        android:layout_below="@+id/song_name"
+        android:text="TextView02"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
