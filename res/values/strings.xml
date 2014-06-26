@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MusicPlayer</string>
+    <string name="app_name">Apollo</string>
     <string name="hello_world">Hello world!</string>
+    <string name="cd_search">cd_search</string>
+    <string name="cd_favorite">cd_favorite</string>
+    <string name="cd_overflow">cd_overflow</string>
+    <string name="settings">settings</string>
+    <string name="eqalizer">eqalizer</string>
+    <string name="shuffle_all">shuffle_all</string>
 
 </resources>
