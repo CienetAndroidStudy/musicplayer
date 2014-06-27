@@ -1,4 +1,4 @@
-package com.cienet.musicplayer;
+package com.cienet.musicplayer.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.cienet.musicplayer.R;
+import com.cienet.musicplayer.adapter.SongListAdapter;
+import com.cienet.musicplayer.entity.Song;
 
 public class MainViewActivity extends Activity {
 

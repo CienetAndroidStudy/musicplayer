@@ -1,4 +1,4 @@
-package com.cienet.musicplayer;
+package com.cienet.musicplayer.entity;
 
 public class Song {
   private String name;

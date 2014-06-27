@@ -1,4 +1,4 @@
-package com.cienet.musicplayer;
+package com.cienet.musicplayer.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cienet.musicplayer.R;
+import com.cienet.musicplayer.entity.Song;
+
 public class SongListAdapter extends BaseAdapter {
 
   private List<Song> songs;
@@ -19,6 +22,11 @@ public class SongListAdapter extends BaseAdapter {
 
   public SongListAdapter() {
     super();
+  }
+  
+  public SongListAdapter(List<Song> songs) {
+    super();
+    this.songs = songs;
   }
 
   public SongListAdapter(Context context, List<Song> songs) {
