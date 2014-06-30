@@ -15,6 +15,12 @@ import android.widget.TextView;
 import com.cienet.musicplayer.R;
 import com.cienet.musicplayer.entity.Song;
 
+/**
+ * 歌曲列表适配器
+ * 
+ * @author chaochen
+ * 
+ */
 public class SongListAdapter extends BaseAdapter {
 
   private List<Song> songs;
@@ -22,11 +28,6 @@ public class SongListAdapter extends BaseAdapter {
 
   public SongListAdapter() {
     super();
-  }
-  
-  public SongListAdapter(List<Song> songs) {
-    super();
-    this.songs = songs;
   }
 
   public SongListAdapter(Context context, List<Song> songs) {
@@ -70,7 +71,7 @@ public class SongListAdapter extends BaseAdapter {
     final Song song = (Song) getItem(position);
     ViewHolder viewHolder = null;
     if (convertView == null) {
-      Log.d("MyBaseAdapter", "新建convertView,position=" + position);
+      Log.i("MyBaseAdapter", "新建convertView,position=" + position);
       convertView = LayoutInflater.from(context).inflate(R.layout.music_list_item, null);
 
       viewHolder = new ViewHolder();
@@ -82,7 +83,7 @@ public class SongListAdapter extends BaseAdapter {
       convertView.setTag(viewHolder);
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
-      Log.d("MyBaseAdapter", "旧的convertView,position=" + position);
+      Log.i("MyBaseAdapter", "旧的convertView,position=" + position);
     }
 
     viewHolder.textViewItem01.setText(song.getName());

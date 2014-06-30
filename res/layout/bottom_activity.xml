@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@color/black"
+    android:gravity="fill"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/song_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dip"
+        android:background="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/singer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/song_name"
+        android:layout_below="@+id/song_name"
+        android:text="歌唱者"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/song_image"
+        android:text="歌曲名字"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
+
+    <ImageButton
+        android:id="@+id/lastButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/playButton"
+        android:background="@drawable/btn_playback_previous" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="14dp"
+        android:layout_toLeftOf="@+id/nextButton"
+        android:background="@drawable/btn_playback_pause" />
+
+    <ImageButton
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/btn_playback_next" />
+
+</RelativeLayout>

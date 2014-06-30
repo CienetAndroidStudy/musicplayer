@@ -23,7 +23,7 @@ public class MusicListActivity extends Activity {
     setContentView(R.layout.music_list);
 
     // 绑定Layout里面的ListView
-    listView = (ListView) findViewById(R.id.music_list_view);
+    //listView = (ListView) findViewById(R.id.music_list_view);
 
     // 显示ListView
     initListAllSongs();
