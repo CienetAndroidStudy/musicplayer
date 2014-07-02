@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,9 +40,28 @@ public class SongListFragment extends Fragment {
     Log.i(TAG, "--------onCreate");
 
     songs = new ArrayList<Song>();
-    for (int i = 10; i < 30; i++) {
-      songs.add(new Song("歌曲" + i, "专辑" + i));
+
+    Cursor cursor =
+        this.getActivity()
+            .getContentResolver()
+            .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null,
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+    for (int i = 0; i < cursor.getCount(); i++) {
+      Song song = new Song();
+      cursor.moveToNext();
+      String name = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));// 歌曲标题
+      // String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));// 艺术家
+      String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));// 专辑
+      int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));// 是否为音乐
+      if (isMusic != 0) { // 只把音乐添加到集合当中
+        song.setName(name);
+        song.setAlbum(album);
+        songs.add(song);
+      }
     }
+    // for (int i = 0; i < 20; i++) {
+    // songs.add(new Song("歌曲" + i, "专辑" + i));
+    // }
     songListAdapter = new SongListAdapter(getActivity(), songs);
   }
 

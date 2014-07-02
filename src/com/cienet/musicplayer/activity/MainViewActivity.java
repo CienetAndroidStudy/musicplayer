@@ -37,7 +37,7 @@ public class MainViewActivity extends FragmentActivity {
     // 设置竖屏
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-    setContentView(R.layout.view_pager);
+    setContentView(R.layout.main_view);
     initView();
 
   }

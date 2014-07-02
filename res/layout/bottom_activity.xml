@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:background="@color/black"
-    android:gravity="fill"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <ImageButton
         android:id="@+id/song_image"

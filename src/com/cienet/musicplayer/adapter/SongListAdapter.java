@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cienet.musicplayer.R;
@@ -63,7 +62,6 @@ public class SongListAdapter extends BaseAdapter {
   public class ViewHolder {
     TextView textViewItem01;
     TextView textViewItem02;
-    ImageView imageView;
   }
 
   @Override
@@ -77,7 +75,6 @@ public class SongListAdapter extends BaseAdapter {
       viewHolder = new ViewHolder();
       viewHolder.textViewItem01 = (TextView) convertView.findViewById(R.id.song_name);
       viewHolder.textViewItem02 = (TextView) convertView.findViewById(R.id.song_album);
-      viewHolder.imageView = (ImageView) convertView.findViewById(R.id.song_image);
 
 
       convertView.setTag(viewHolder);
@@ -88,7 +85,6 @@ public class SongListAdapter extends BaseAdapter {
 
     viewHolder.textViewItem01.setText(song.getName());
     viewHolder.textViewItem02.setText(song.getAlbum());
-    viewHolder.imageView.setImageResource(song.getImage());
 
     // 对ListView中第1个TextView配置OnClick事件
     // viewHolder.textViewItem01.setOnClickListener(new OnClickListener() {

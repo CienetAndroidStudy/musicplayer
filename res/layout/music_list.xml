@@ -6,10 +6,12 @@
 
     <ListView
         android:id="@+id/music_list_view"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
+        android:paddingLeft="15dip"
         android:divider="@color/white"
         android:dividerHeight="1px" />
-<!-- 分割线的颜色和亮度 -->
+    <!-- 分割线的颜色和亮度 -->
+
 </LinearLayout>
