@@ -11,8 +11,6 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -62,15 +60,13 @@ public class MainViewActivity extends FragmentActivity {
 
 
     RelativeLayout bottomlayout = (RelativeLayout) findViewById(R.id.bottom_bar);
-    bottomlayout.setOnClickListener(new OnClickListener() {
 
-      @Override
-      public void onClick(View v) {
-        Toast.makeText(v.getContext(), "你点击了底部菜单栏", Toast.LENGTH_LONG).show();
-
-      }
-
-    });
+    // bottomlayout.setOnClickListener(new OnClickListener() {
+    // @Override
+    // public void onClick(View v) {
+    // Toast.makeText(v.getContext(), "你点击了底部菜单栏", Toast.LENGTH_LONG).show();
+    // }
+    // });
 
   }
 

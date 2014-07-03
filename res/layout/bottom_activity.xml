@@ -49,7 +49,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="14dp"
         android:layout_toLeftOf="@+id/nextButton"
-        android:background="@drawable/btn_playback_pause" />
+        android:background="@drawable/btn_playback_play" />
 
     <ImageButton
         android:id="@+id/nextButton"

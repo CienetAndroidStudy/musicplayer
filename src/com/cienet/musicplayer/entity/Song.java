@@ -4,6 +4,8 @@ public class Song {
   private String name;
   private String album;
   private int image;
+  private String url;
+  private String singer;
 
   public Song() {
     super();
@@ -44,5 +46,21 @@ public class Song {
 
   public void setImage(int image) {
     this.image = image;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public String getSinger() {
+    return singer;
+  }
+
+  public void setSinger(String singer) {
+    this.singer = singer;
   }
 }
