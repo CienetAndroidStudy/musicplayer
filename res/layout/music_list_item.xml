@@ -3,15 +3,15 @@
     android:id="@+id/list_item"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="15dip"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="15dip" >
 
     <TextView
         android:id="@+id/song_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView01"
         android:paddingTop="10dip"
+        android:text="TextView01"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
@@ -20,9 +20,9 @@
         android:id="@+id/song_album"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView02"
-        android:paddingTop="10dip"
         android:paddingBottom="10dip"
+        android:paddingTop="10dip"
+        android:text="TextView02"
         android:textColor="@color/white"
         android:textSize="12sp" />
 

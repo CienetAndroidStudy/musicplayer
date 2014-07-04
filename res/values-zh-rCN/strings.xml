@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Apollo</string>
+    <string name="settings">设置</string>
+    <string name="apollo_playlists">播放列表</string>
+    <string name="apollo_recent">最近播放</string>
+    <string name="apollo_artists">艺术家</string>
+    <string name="apollo_albums">专辑</string>
+    <string name="apollo_songs">歌曲</string>
+    <string name="apollo_genres">流派</string>
+    <string name="singer">演唱者</string>
+    <string name="song_name">歌曲名</string>
+
+</resources>

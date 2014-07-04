@@ -9,5 +9,13 @@
     <string name="settings">settings</string>
     <string name="eqalizer">eqalizer</string>
     <string name="shuffle_all">shuffle_all</string>
+    <string name="apollo_playlists">PLAYLISTS</string>
+    <string name="apollo_recent">RECENT</string>
+    <string name="apollo_artists">ARTISTS</string>
+    <string name="apollo_albums">ALBUM</string>
+    <string name="apollo_songs">SONGS</string>
+    <string name="apollo_genres">GENRES</string>
+    <string name="singer">SINGER</string>
+    <string name="song_name">SONGNAME</string>
 
 </resources>

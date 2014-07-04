@@ -45,22 +45,24 @@ public class MainViewActivity extends FragmentActivity {
     viewPager.setAdapter(new PlayerPageAdapter(getSupportFragmentManager()));
 
     pagerTabStrip = (PagerTabStrip) findViewById(R.id.pagertab);
-    pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.powderblue));
+    // pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.powderblue));
 
-    pagerTabStrip.setTextColor(getResources().getColor(R.color.powderblue));
+    // pagerTabStrip.setTextColor(getResources().getColor(R.color.powderblue));
 
-    pagerTabStrip.setDrawFullUnderline(false);
-    pagerTabStrip.setBackgroundColor(getResources().getColor(R.color.black));
+    pagerTabStrip.setDrawFullUnderline(true);
+    // pagerTabStrip.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_stripes_dark));
     pagerTabStrip.setTextSpacing(50);
 
     titleList = new ArrayList<String>();
-    titleList.add("TEXT");
-    titleList.add("ALBUMS");
-    titleList.add("SONGS");
+    titleList.add(getResources().getString(R.string.apollo_playlists));
+    titleList.add(getResources().getString(R.string.apollo_recent));
+    titleList.add(getResources().getString(R.string.apollo_artists));
+    titleList.add(getResources().getString(R.string.apollo_albums));
+    titleList.add(getResources().getString(R.string.apollo_songs));
+    titleList.add(getResources().getString(R.string.apollo_genres));
 
 
-    RelativeLayout bottomlayout = (RelativeLayout) findViewById(R.id.bottom_bar);
-
+    // RelativeLayout bottomlayout = (RelativeLayout) findViewById(R.id.bottom_bar);
     // bottomlayout.setOnClickListener(new OnClickListener() {
     // @Override
     // public void onClick(View v) {
@@ -98,6 +100,9 @@ public class MainViewActivity extends FragmentActivity {
     public PlayerPageAdapter(android.support.v4.app.FragmentManager fm) {
       super(fm);
 
+      list.add(new SongListFragment());
+      list.add(new SongListFragment());
+      list.add(new SongListFragment());
       list.add(new SongListFragment());
       list.add(new SongListFragment());
       list.add(new SongListFragment());
