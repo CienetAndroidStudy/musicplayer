@@ -2,7 +2,6 @@
 <<<<<<<=HEAD
 >>>>>>>=Modify the page color, add the top button
 eclipse.preferences.version=1
-encoding//gen/com/cienet/musicplayer/R.java=UTF-8
 encoding//src/com/cienet/musicplayer/MainViewActivity.java=UTF-8
 encoding//src/com/cienet/musicplayer/adapter/SongListAdapter.java=UTF-8
 encoding//src/com/cienet/musicplayer/entity/Song.java=UTF-8
