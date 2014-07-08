@@ -17,5 +17,7 @@
     <string name="apollo_genres">GENRES</string>
     <string name="singer">SINGER</string>
     <string name="song_name">SONGNAME</string>
+    <string name="time_start">00:00</string>
+    <string name="time_end">04:00</string>
 
 </resources>

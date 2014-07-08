@@ -60,8 +60,8 @@ public class SongListAdapter extends BaseAdapter {
   }
 
   public class ViewHolder {
-    TextView textViewItem01;
-    TextView textViewItem02;
+    TextView songName;
+    TextView songAlbum;
   }
 
   @Override
@@ -73,8 +73,8 @@ public class SongListAdapter extends BaseAdapter {
       convertView = LayoutInflater.from(context).inflate(R.layout.music_list_item, null);
 
       viewHolder = new ViewHolder();
-      viewHolder.textViewItem01 = (TextView) convertView.findViewById(R.id.song_name);
-      viewHolder.textViewItem02 = (TextView) convertView.findViewById(R.id.song_album);
+      viewHolder.songName = (TextView) convertView.findViewById(R.id.song_name);
+      viewHolder.songAlbum = (TextView) convertView.findViewById(R.id.song_album);
 
 
       convertView.setTag(viewHolder);
@@ -83,8 +83,8 @@ public class SongListAdapter extends BaseAdapter {
       Log.i("MyBaseAdapter", "旧的convertView,position=" + position);
     }
 
-    viewHolder.textViewItem01.setText(song.getName());
-    viewHolder.textViewItem02.setText(song.getAlbum());
+    viewHolder.songName.setText(song.getName());
+    viewHolder.songAlbum.setText(song.getAlbum());
 
     // 对ListView中第1个TextView配置OnClick事件
     // viewHolder.textViewItem01.setOnClickListener(new OnClickListener() {

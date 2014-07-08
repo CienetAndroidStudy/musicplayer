@@ -3,7 +3,7 @@ package com.cienet.musicplayer.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,6 +11,9 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cienet.musicplayer.R;
@@ -27,12 +30,13 @@ public class MainViewActivity extends FragmentActivity {
   private ViewPager viewPager;
   private PagerTabStrip pagerTabStrip;
   private List<String> titleList;
+  private RelativeLayout bottomlayout;
+
+
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // 设置竖屏
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     setContentView(R.layout.main_view);
     initView();
@@ -44,31 +48,26 @@ public class MainViewActivity extends FragmentActivity {
     viewPager.setAdapter(new PlayerPageAdapter(getSupportFragmentManager()));
 
     pagerTabStrip = (PagerTabStrip) findViewById(R.id.pagertab);
-    // pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.powderblue));
-
-    // pagerTabStrip.setTextColor(getResources().getColor(R.color.powderblue));
 
     pagerTabStrip.setDrawFullUnderline(true);
-    // pagerTabStrip.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_stripes_dark));
     pagerTabStrip.setTextSpacing(50);
 
-    titleList = new ArrayList<String>();
-    titleList.add(getResources().getString(R.string.apollo_playlists));
-    titleList.add(getResources().getString(R.string.apollo_recent));
-    titleList.add(getResources().getString(R.string.apollo_artists));
-    titleList.add(getResources().getString(R.string.apollo_albums));
-    titleList.add(getResources().getString(R.string.apollo_songs));
-    titleList.add(getResources().getString(R.string.apollo_genres));
+    bottomlayout = (RelativeLayout) findViewById(R.id.bottom_bar);
 
 
-    // RelativeLayout bottomlayout = (RelativeLayout) findViewById(R.id.bottom_bar);
-    // bottomlayout.setOnClickListener(new OnClickListener() {
-    // @Override
-    // public void onClick(View v) {
-    // Toast.makeText(v.getContext(), "你点击了底部菜单栏", Toast.LENGTH_LONG).show();
-    // }
-    // });
+    bottomlayout.setOnClickListener(new OnClickListener() {
 
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent();
+        intent.setClass(MainViewActivity.this, SongPlayActivity.class);
+        startActivity(intent);
+
+        // 设置淡入淡出效果
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+      }
+
+    });
   }
 
   @Override
@@ -98,6 +97,14 @@ public class MainViewActivity extends FragmentActivity {
 
     public PlayerPageAdapter(android.support.v4.app.FragmentManager fm) {
       super(fm);
+
+      titleList = new ArrayList<String>();
+      titleList.add(getResources().getString(R.string.apollo_playlists));
+      titleList.add(getResources().getString(R.string.apollo_recent));
+      titleList.add(getResources().getString(R.string.apollo_artists));
+      titleList.add(getResources().getString(R.string.apollo_albums));
+      titleList.add(getResources().getString(R.string.apollo_songs));
+      titleList.add(getResources().getString(R.string.apollo_genres));
 
       list.add(new SongListFragment());
       list.add(new SongListFragment());
