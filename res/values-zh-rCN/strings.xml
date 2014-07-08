@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Apollo</string>
+    <string name="app_name">MusicPlayer</string>
     <string name="settings">设置</string>
     <string name="apollo_playlists">播放列表</string>
     <string name="apollo_recent">最近播放</string>

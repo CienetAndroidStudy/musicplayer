@@ -1,13 +1,18 @@
 package com.cienet.musicplayer.fragment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,25 +31,63 @@ import android.widget.Toast;
 
 import com.cienet.musicplayer.R;
 import com.cienet.musicplayer.adapter.SongListAdapter;
+import com.cienet.musicplayer.app.MusicPlayerApp;
+import com.cienet.musicplayer.controller.MusicInfoController;
 import com.cienet.musicplayer.entity.Song;
+import com.cienet.musicplayer.service.MusicPlayService;
 
 public class SongListFragment extends Fragment {
   private String TAG = SongListFragment.class.getName();
   private List<Song> songs;
   private SongListAdapter songListAdapter;
-  private ListView musicListView = null;
-  private static MediaPlayer mediaPlayer = new MediaPlayer();
-  private ImageButton previousButton, playButton, nextButton;
-  private TextView singer, songName;
-  private boolean isPause = false;// 暂停标识
+  private ListView musicListView;
+  private ImageButton previousButton;
+  private ImageButton playButton;
+  private ImageButton nextButton;
+  private TextView singer;
+  private TextView songName;
   private static int musicPosition;
+  private MusicPlayService mMusicPlayerService;
+  private MusicInfoController mMusicInfoController;
+  private Cursor mCursor;
+  /**
+   * service connect
+   */
+  private ServiceConnection mPlaybackConnection = new ServiceConnection() {
+    public void onServiceConnected(ComponentName className, IBinder service) {
+      mMusicPlayerService = ((MusicPlayService.MusicBinder) service).getService();
+    }
 
+    public void onServiceDisconnected(ComponentName className) {
+      mMusicPlayerService = null;
+    }
+  };
+  /**
+   * Get BroadcastReceiver from Service
+   */
+  protected BroadcastReceiver mPlayerEvtReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      Log.i(TAG, "BroadcastReceiver："+intent.getAction());
+      String action = intent.getAction();
+      
+      if (action.equals(MusicPlayService.PLAY_PREPARED_END)) {
+        playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+        Log.i(TAG, "PLAY_PREPARED_END");
+      } else if (action.equals(MusicPlayService.PLAY_COMPLETED)) {
+        playButton.setBackgroundResource(R.drawable.btn_playback_play);
+        Log.i(TAG, "PLAY_COMPLETED");
+      }
+    }
+  };
+
+  /**
+   * onAttach
+   */
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     Log.i(TAG, "----------onAttach");
-
-
     RelativeLayout bottomlayout = (RelativeLayout) activity.findViewById(R.id.bottom_bar);
     previousButton = (ImageButton) bottomlayout.findViewById(R.id.lastButton);
     playButton = (ImageButton) bottomlayout.findViewById(R.id.playButton);
@@ -52,76 +96,76 @@ public class SongListFragment extends Fragment {
     songName = (TextView) bottomlayout.findViewById(R.id.song_name);
   }
 
+  /**
+   * onCreate
+   */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.i(TAG, "--------onCreate");
+    MusicPlayerApp musicPlayerApp = (MusicPlayerApp) getActivity().getApplication();
+    mMusicInfoController = (musicPlayerApp).getMusicInfoController();
+    /* bind playback service */
+    Log.i(TAG, "startService");
+    getAllSongs();
+    getActivity().startService(new Intent(getActivity(), MusicPlayService.class));
+    getActivity().bindService(new Intent(getActivity(), MusicPlayService.class),
+        mPlaybackConnection, Context.BIND_AUTO_CREATE);
+  }
 
+  /**
+   * Get music from sdCards
+   */
+  public ListAdapter getAllSongs() {
     songs = new ArrayList<Song>();
-
-    Cursor cursor =
-        this.getActivity()
-            .getContentResolver()
-            .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null,
-                MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-    for (int i = 0; i < cursor.getCount(); i++) {
+    mCursor =
+        mMusicInfoController.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null,
+            MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+    for (int i = 0; i < mCursor.getCount(); i++) {
       Song song = new Song();
-      cursor.moveToNext();
-      String name = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));// 歌曲标题
-      String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));// 艺术家
-      String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));// 专辑
-      String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));// 路径
-      int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));// 是否为音乐
-      if (isMusic != 0) { // 只把音乐添加到集合当中
+      mCursor.moveToNext();
+      String name = mCursor.getString((mCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));// 歌曲标题
+      String artist = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));// 艺术家
+      String album = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));// 专辑
+      String url = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DATA));// 路径
+      int isMusic = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));// 是否为音乐
+      if (isMusic != 0) { // add music to list
         song.setName(name);
         song.setSinger(artist);
         song.setAlbum(album);
         song.setUrl(url);
         songs.add(song);
       }
-
     }
-    // for (int i = 0; i < 20; i++) {
-    // songs.add(new Song("歌曲" + i, "专辑" + i));
-    // }
     songListAdapter = new SongListAdapter(getActivity(), songs);
+    return songListAdapter;
   }
 
+  /**
+   * onCreateView
+   */
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.music_list, container, false);
     musicListView = (ListView) view.findViewById(R.id.music_list_view);
-
+    musicListView.setAdapter(getAllSongs());
     /**
-     * 点击歌曲列表，播放音乐
+     * Click Item and Play the music
      */
     musicListView.setOnItemClickListener(new OnItemClickListener() {
 
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // Toast.makeText(view.getContext(), "你点击了第" + position + "个Item",
-        // Toast.LENGTH_LONG).show();
-        musicPosition = position;
-        try {
-          isPause = false;
-          if (mediaPlayer.isPlaying()) {
-            mediaPlayer.reset();
-          }
-          playButton.setBackgroundResource(R.drawable.btn_playback_pause);
-          singer.setText(songs.get(position).getSinger());
-          songName.setText(songs.get(position).getName());
-          mediaPlayer.setDataSource(songs.get(position).getUrl());
-          mediaPlayer.prepare();
-          mediaPlayer.start();
-        } catch (IllegalArgumentException e) {
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          e.printStackTrace();
-        } catch (IOException e) {
-          e.printStackTrace();
+        if (songs.size() <= 0) {
+          return;
         }
+        Log.i(TAG,"OnItemClick："+position + songs.size());
+        musicPosition = position;
+        singer.setText(songs.get(position).getSinger());
+        songName.setText(songs.get(position).getName());
+        mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
+        mMusicPlayerService.start();
+        playButton.setBackgroundResource(R.drawable.btn_playback_pause);
       }
     });
 
@@ -129,118 +173,77 @@ public class SongListFragment extends Fragment {
 
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(view.getContext(), "你长按了第" + position + "个Item", Toast.LENGTH_LONG).show();
-        // 如果为true,则触发了setOnItemLongClickListener事件后不触发setOnItemClickListener事件
+        Toast.makeText(view.getContext(), "Long Press the " + position + "  Item",
+            Toast.LENGTH_LONG).show();
         return true;
       }
 
     });
-
-    musicListView.setAdapter(songListAdapter);
-
-    Log.i(TAG, "--------onCreateView");
-
-
     /**
-     * 点击暂停或者播放按钮
+     * click the playOrPause button
      */
     playButton.setOnClickListener(new ImageButton.OnClickListener() {
+
       @Override
       public void onClick(View v) {
-        if (mediaPlayer != null) {
-          if (!isPause) {
-            isPause = true;
-            playButton.setBackgroundResource(R.drawable.btn_playback_play);
-            mediaPlayer.pause();
-          } else {
-            isPause = false;
-            try {
-              if (mediaPlayer.isPlaying()) {
-                mediaPlayer.reset();
-              }
-              playButton.setBackgroundResource(R.drawable.btn_playback_pause);
-              mediaPlayer.prepare();
-              mediaPlayer.start();
-            } catch (IllegalArgumentException e) {
-              e.printStackTrace();
-            } catch (SecurityException e) {
-              e.printStackTrace();
-            } catch (IllegalStateException e) {
-              e.printStackTrace();
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
+        Log.e(TAG, "playButton setOnClickListener");
+        if (mMusicPlayerService != null && mMusicPlayerService.isPlaying()) {
+          mMusicPlayerService.pause();
+          playButton.setBackgroundResource(R.drawable.btn_playback_play);
+        } else if (mMusicPlayerService != null) {
+          mMusicPlayerService.start();
+          playButton.setBackgroundResource(R.drawable.btn_playback_pause);
         }
       }
     });
 
     /**
-     * 点击上一首
+     * previous music
      */
     previousButton.setOnClickListener(new ImageButton.OnClickListener() {
       @Override
       public void onClick(View v) {
         if (musicPosition >= 1) {
-          if (mediaPlayer != null) {
-            isPause = false;
-            try {
-              if (mediaPlayer.isPlaying()) {
-                mediaPlayer.reset();
-              }
-              playButton.setBackgroundResource(R.drawable.btn_playback_pause);
-              singer.setText(songs.get(musicPosition - 1).getSinger());
-              songName.setText(songs.get(musicPosition - 1).getName());
-              mediaPlayer.setDataSource(songs.get(musicPosition - 1).getUrl());
-              mediaPlayer.prepare();
-              mediaPlayer.start();
-            } catch (IllegalArgumentException e) {
-              e.printStackTrace();
-            } catch (SecurityException e) {
-              e.printStackTrace();
-            } catch (IllegalStateException e) {
-              e.printStackTrace();
-            } catch (IOException e) {
-              e.printStackTrace();
+          if (mMusicPlayerService != null) {
+            if (mMusicPlayerService.isPlaying()) {
+              mMusicPlayerService.reset();
             }
+            musicPosition = musicPosition - 1;
+            playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+            singer.setText(songs.get(musicPosition).getSinger());
+            songName.setText(songs.get(musicPosition).getName());
+            mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
+            mMusicPlayerService.start();
           }
         }
       }
     });
-
-
     /**
-     * 点击下一首
+     * next music
      */
     nextButton.setOnClickListener(new ImageButton.OnClickListener() {
       @Override
       public void onClick(View v) {
         if (musicPosition < songs.size()) {
-          if (mediaPlayer != null) {
-            isPause = false;
-            try {
-              if (mediaPlayer.isPlaying()) {
-                mediaPlayer.reset();
-              }
-              mediaPlayer.setDataSource(songs.get(musicPosition + 1).getUrl());
-              singer.setText(songs.get(musicPosition + 1).getSinger());
-              songName.setText(songs.get(musicPosition + 1).getName());
-              playButton.setBackgroundResource(R.drawable.btn_playback_pause);
-              mediaPlayer.prepare();
-              mediaPlayer.start();
-            } catch (IllegalArgumentException e) {
-              e.printStackTrace();
-            } catch (SecurityException e) {
-              e.printStackTrace();
-            } catch (IllegalStateException e) {
-              e.printStackTrace();
-            } catch (IOException e) {
-              e.printStackTrace();
+          if (mMusicPlayerService != null) {
+            if (mMusicPlayerService.isPlaying()) {
+              mMusicPlayerService.reset();
             }
+            musicPosition = musicPosition + 1;
+            playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+            mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
+            singer.setText(songs.get(musicPosition).getSinger());
+            songName.setText(songs.get(musicPosition).getName());
+            mMusicPlayerService.start();
+
           }
         }
       }
     });
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(MusicPlayService.PLAY_PREPARED_END);
+    filter.addAction(MusicPlayService.PLAY_COMPLETED);
+    getActivity().registerReceiver(mPlayerEvtReceiver, filter);
     return view;
   }
 
@@ -248,7 +251,6 @@ public class SongListFragment extends Fragment {
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     Log.i(TAG, "--------onActivityCreated");
-
   }
 
 }

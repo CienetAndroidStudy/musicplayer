@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:divider="@color/white"
         android:dividerHeight="1px"
-        android:paddingLeft="15dip" />
-    <!-- 分割线的颜色和亮度 -->
+        android:paddingRight="15dip" />
 
 </LinearLayout>

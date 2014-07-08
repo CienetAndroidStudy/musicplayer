@@ -11,10 +11,8 @@
         android:id="@+id/top_bar"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_marginRight="5dip"
         android:background="#0099CC"
         tools:ignore="ContentDescription" />
-
     <ImageButton
         android:id="@+id/song_image"
         android:layout_width="wrap_content"
