@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.cienet.musicplayer.R;
+import com.cienet.musicplayer.fragment.ArtistListFragment;
 import com.cienet.musicplayer.fragment.SongListFragment;
 
 /**
@@ -101,7 +102,7 @@ public class MainViewActivity extends FragmentActivity {
 
       list.add(new SongListFragment());
       list.add(new SongListFragment());
-      list.add(new SongListFragment());
+      list.add(new ArtistListFragment());
       list.add(new SongListFragment());
       list.add(new SongListFragment());
       list.add(new SongListFragment());

@@ -68,9 +68,9 @@ public class SongListFragment extends Fragment {
   protected BroadcastReceiver mPlayerEvtReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
-      Log.i(TAG, "BroadcastReceiver："+intent.getAction());
+      Log.i(TAG, "BroadcastReceiver：" + intent.getAction());
       String action = intent.getAction();
-      
+
       if (action.equals(MusicPlayService.PLAY_PREPARED_END)) {
         playButton.setBackgroundResource(R.drawable.btn_playback_pause);
         Log.i(TAG, "PLAY_PREPARED_END");
@@ -159,7 +159,7 @@ public class SongListFragment extends Fragment {
         if (songs.size() <= 0) {
           return;
         }
-        Log.i(TAG,"OnItemClick："+position + songs.size());
+        Log.i(TAG, "OnItemClick：" + position + songs.size());
         musicPosition = position;
         singer.setText(songs.get(position).getSinger());
         songName.setText(songs.get(position).getName());
@@ -252,5 +252,12 @@ public class SongListFragment extends Fragment {
     super.onActivityCreated(savedInstanceState);
     Log.i(TAG, "--------onActivityCreated");
   }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+
+    super.onSaveInstanceState(outState);
+  }
+
 
 }

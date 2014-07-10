@@ -17,5 +17,7 @@
     <string name="apollo_genres">GENRES</string>
     <string name="singer">SINGER</string>
     <string name="song_name">SONGNAME</string>
-
-</resources>
+    <string name="album_num">AlbumNum</string>
+    <string name="unknown_artist">unknown</string>
+    <string name="artist">artist</string>
+</resources>

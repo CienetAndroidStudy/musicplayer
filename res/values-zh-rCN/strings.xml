@@ -11,5 +11,6 @@
     <string name="apollo_genres">流派</string>
     <string name="singer">演唱者</string>
     <string name="song_name">歌曲名</string>
-
-</resources>
+    <string name="unknown_artist">未知艺术家</string>
+    <string name="artist">艺术家</string>
+</resources>
