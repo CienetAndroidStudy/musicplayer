@@ -1,9 +1,7 @@
 package com.cienet.musicplayer.fragment;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.Toast;
-
 import com.cienet.musicplayer.R;
 import com.cienet.musicplayer.adapter.ArtistListAdapter;
 
@@ -89,14 +86,7 @@ public class ArtistListFragment extends Fragment {
       }
       alblumNums[y] = albumSet.size();
     }
-    c.moveToFirst();
-    HashMap<String, String> map = new HashMap<String, String>();
-    int num1 = c.getCount();
-    for (int j = 0; j < num1; j++) {
-      map.put(c.getString(2), c.getString(2));
-      c.moveToNext();
-    }
-    mArtistListView.setAdapter(new ArtistListAdapter(this.getActivity(), artists, alblumNums, map));
+    mArtistListView.setAdapter(new ArtistListAdapter(this.getActivity(), artists, alblumNums));
     mArtistListView.setOnItemClickListener(new AlbumsItemClickListener());
   }
 

@@ -1,7 +1,5 @@
 package com.cienet.musicplayer.adapter;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,15 +20,12 @@ import com.cienet.musicplayer.R;
 public class ArtistListAdapter extends BaseAdapter {
   private Context mContext;
   private String[] artists;
-  private HashMap<String, String> myMap;
   private int[] mAlbumNums;
 
-  public ArtistListAdapter(Context context, String[] string, int[] albumNums,
-      HashMap<String, String> map) {
+  public ArtistListAdapter(Context context, String[] string, int[] albumNums) {
     mContext = context;
     artists = string;
     mAlbumNums = albumNums;
-    myMap = map;
   }
 
   @Override
@@ -63,7 +58,7 @@ public class ArtistListAdapter extends BaseAdapter {
       view = LayoutInflater.from(mContext).inflate(R.layout.artist_list_item, null);
       viewHolder.artist = (TextView) view.findViewById(R.id.artist);
       viewHolder.albumNum = (TextView) view.findViewById(R.id.album_num);
-      //viewHolder.artistsItem = (ImageView) view.findViewById(R.id.artist_item);
+      // viewHolder.artistsItem = (ImageView) view.findViewById(R.id.artist_item);
       view.setTag(viewHolder);
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
@@ -73,17 +68,12 @@ public class ArtistListAdapter extends BaseAdapter {
      * viewHolder.artist.setText(artists[position].substring(0, 12) + "..."); } else {
      * viewHolder.artist.setText(artists[position]); }
      */
-    if (artists[position].equals("sdcard")) {// set artist name
-      viewHolder.artist.setText(R.string.unknown_artist);
-      // viewHolder.albumNum.setText(mAlbumNums[position]+"  albums");
-    } else {
-      viewHolder.artist.setText(myMap.get(artists[position]));
-      viewHolder.artist.setBackgroundColor(0x80000000);
-      viewHolder.albumNum.setText(mAlbumNums[position] + "  albums");
-      viewHolder.albumNum.setBackgroundColor(0x80000000);
-    }
+    viewHolder.artist.setText(artists[position]);
+    viewHolder.artist.setBackgroundColor(0x80000000);
+    viewHolder.albumNum.setText(mAlbumNums[position] + "  albums");
+    viewHolder.albumNum.setBackgroundColor(0x80000000);
 
-    //viewHolder.artistsItem.setImageResource(R.drawable.default_artwork);
+    // viewHolder.artistsItem.setImageResource(R.drawable.default_artwork);
     return view;
   }
 

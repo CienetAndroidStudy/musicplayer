@@ -75,13 +75,24 @@ public class SongListFragment extends Fragment {
     public void onReceive(Context context, Intent intent) {
       Log.i(TAG, "BroadcastReceiver：" + intent.getAction());
       String action = intent.getAction();
-
-      if (action.equals(MusicPlayService.PLAY_PREPARED_END)) {
-        playButton.setBackgroundResource(R.drawable.btn_playback_pause);
-        Log.i(TAG, "PLAY_PREPARED_END");
-      } else if (action.equals(MusicPlayService.PLAY_COMPLETED)) {
-        playButton.setBackgroundResource(R.drawable.btn_playback_play);
-        Log.i(TAG, "PLAY_COMPLETED");
+      switch (action) {
+        case MusicPlayService.PLAY_PREPARED_END:
+          playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+          Log.i(TAG, "PLAY_PREPARED_END");
+          break;
+        case MusicPlayService.PLAY_COMPLETED:
+          Log.i(TAG, "PLAY_COMPLETED :" + musicPosition);
+          if (musicPosition < songs.size()) {
+            // playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+            musicPosition = musicPosition + 1;
+            mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
+            singer.setText(songs.get(musicPosition).getSinger());
+            songName.setText(songs.get(musicPosition).getName());
+            mMusicPlayerService.start();
+          }
+          break;
+        default:
+          break;
       }
     }
   };
@@ -231,6 +242,12 @@ public class SongListFragment extends Fragment {
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             mMusicPlayerService.start();
           }
+        } else {
+          playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+          singer.setText(songs.get(0).getSinger());
+          songName.setText(songs.get(0).getName());
+          mMusicPlayerService.setDataSource(songs.get(0).getUrl());
+          mMusicPlayerService.start();
         }
       }
     });
@@ -252,7 +269,6 @@ public class SongListFragment extends Fragment {
             songName.setText(songs.get(musicPosition).getName());
             // albumImage.setImageBitmap(songs.get(musicPosition).getImage());
             mMusicPlayerService.start();
-
           }
         }
       }

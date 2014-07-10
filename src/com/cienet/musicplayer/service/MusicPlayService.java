@@ -40,6 +40,7 @@ public class MusicPlayService extends Service {
     public void onCompletion(MediaPlayer mp) {
       Log.d(TAG, PLAY_COMPLETED);
       broadcastEvent(PLAY_COMPLETED);
+
     }
   };
 
