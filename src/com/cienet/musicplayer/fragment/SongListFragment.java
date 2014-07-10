@@ -253,11 +253,4 @@ public class SongListFragment extends Fragment {
     Log.i(TAG, "--------onActivityCreated");
   }
 
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-
-    super.onSaveInstanceState(outState);
-  }
-
-
 }
