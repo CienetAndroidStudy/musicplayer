@@ -53,12 +53,9 @@ public class MainViewActivity extends FragmentActivity implements
   private TextView singer;
   private TextView songName;
   private int musicPosition;
-  private String tag;
   private List<Song> songs;
   private Cursor mCursor;
   private Context context;
-  private final static String SongListFragment = "SongListFragment";
-
   // private final static String AlbumListFragment = "AlbumListFragment";
   // private final static String ArtistListFragment = "ArtistListFragment";
 
@@ -219,39 +216,35 @@ public class MainViewActivity extends FragmentActivity implements
     songName = (TextView) findViewById(R.id.song_name);
     songImage = (ImageButton) findViewById(R.id.song_image);
     context = getApplicationContext();
-    tag = "SongListFragment";
-    switch (tag) {
-      case SongListFragment:
-        songs = new ArrayList<Song>();
-        mCursor =
-            this.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
-                null, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-        for (int i = 0; i < mCursor.getCount(); i++) {
-          Song song = new Song();
-          mCursor.moveToNext();
-          String name = mCursor.getString((mCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));// 歌曲标题
-          String artist = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));// 艺术家
-          String album =
-              mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));// 专辑
-          String url = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DATA));// 路径
-          long songId = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media._ID));
-          long albumId = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-          long duration = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)); // 时长
-          int isMusic = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));// 是否为音乐
-          if (isMusic != 0) { // add music to list
-            song.setName(name);
-            song.setSinger(artist);
-            song.setAlbum(album);
-            song.setUrl(url);
-            song.setAlbumId(albumId);
-            song.setSongId(songId);
-            song.setDuration(duration);
-            songs.add(song);
-          }
-        }
-        break;
-      default:
-        break;
+    setListData();
+  }
+
+  private void setListData() {
+    songs = new ArrayList<Song>();
+    mCursor =
+        this.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
+            null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+    for (int i = 0; i < mCursor.getCount(); i++) {
+      Song song = new Song();
+      mCursor.moveToNext();
+      String name = mCursor.getString((mCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));// 歌曲标题
+      String artist = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));// 艺术家
+      String album = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));// 专辑
+      String url = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DATA));// 路径
+      long songId = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media._ID));
+      long albumId = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+      long duration = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)); // 时长
+      int isMusic = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));// 是否为音乐
+      if (isMusic != 0) { // add music to list
+        song.setName(name);
+        song.setSinger(artist);
+        song.setAlbum(album);
+        song.setUrl(url);
+        song.setAlbumId(albumId);
+        song.setSongId(songId);
+        song.setDuration(duration);
+        songs.add(song);
+      }
     }
   }
 
@@ -319,7 +312,6 @@ public class MainViewActivity extends FragmentActivity implements
   @Override
   public void onItemSelected(int position, String fragmentTag) {
     musicPosition = position;
-    tag = fragmentTag;
     playButton.setBackgroundResource(R.drawable.btn_playback_pause);
     mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
     singer.setText(songs.get(musicPosition).getSinger());
