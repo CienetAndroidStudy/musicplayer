@@ -94,7 +94,7 @@ public class ArtistListFragment extends Fragment {
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
-      Toast toast = Toast.makeText(getActivity(), "hahaha", Toast.LENGTH_SHORT);
+      Toast toast = Toast.makeText(getActivity(), position+"→"+artists[position], Toast.LENGTH_SHORT);
       toast.show();
       // Intent intent = new Intent();
       // intent.setClass(AlbumActivity.this, SongsOfAlbumActivity.class);
