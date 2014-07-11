@@ -21,7 +21,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="5dip"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
         android:src="@drawable/default_artwork"
         tools:ignore="ContentDescription" />
 

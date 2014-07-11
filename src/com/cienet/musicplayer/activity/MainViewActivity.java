@@ -39,7 +39,8 @@ import com.cienet.musicplayer.util.ArtworkUtils;
  * @author chaochen
  * 
  */
-public class MainViewActivity extends FragmentActivity implements SongListFragment.OnItemSelectedListener{
+public class MainViewActivity extends FragmentActivity implements
+    SongListFragment.OnItemSelectedListener {
   private RelativeLayout bottomlayout;
   private ViewPager viewPager;
   private PagerTabStrip pagerTabStrip;
@@ -48,6 +49,7 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
   private ImageButton previousButton;
   private ImageButton playButton;
   private ImageButton nextButton;
+  private ImageButton songImage;
   private TextView singer;
   private TextView songName;
   private int musicPosition;
@@ -110,6 +112,13 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
           playButton.setBackgroundResource(R.drawable.btn_playback_pause);
           singer.setText(songs.get(0).getSinger());
           songName.setText(songs.get(0).getName());
+          if (songs.get(musicPosition).getImage() == null) {
+            songs.get(musicPosition).setImage(
+                ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+                    songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(),
+                    true));
+          }
+          songImage.setImageBitmap(songs.get(musicPosition).getImage());
           mMusicPlayerService.setDataSource(songs.get(0).getUrl());
           mMusicPlayerService.start();
         }
@@ -131,6 +140,13 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
+            if (songs.get(musicPosition).getImage() == null) {
+              songs.get(musicPosition).setImage(
+                  ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+                      songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(),
+                      true));
+            }
+            songImage.setImageBitmap(songs.get(musicPosition).getImage());
             mMusicPlayerService.start();
           }
         }
@@ -144,10 +160,12 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
         Bundle bundle = new Bundle();
         bundle.putInt("position", musicPosition);
         bundle.putString("tag", "SongListFragment");
+        bundle.putBoolean("isPlaying", mMusicPlayerService.isPlaying());
         Intent intent = new Intent();
         intent.setClass(MainViewActivity.this, SongPlayActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
+
         // 设置淡入淡出效果
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
       }
@@ -199,6 +217,7 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
     nextButton = (ImageButton) findViewById(R.id.nextButton);
     singer = (TextView) findViewById(R.id.singer);
     songName = (TextView) findViewById(R.id.song_name);
+    songImage = (ImageButton) findViewById(R.id.song_image);
     context = getApplicationContext();
     tag = "SongListFragment";
     switch (tag) {
@@ -227,7 +246,6 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
             song.setAlbumId(albumId);
             song.setSongId(songId);
             song.setDuration(duration);
-            song.setImage(ArtworkUtils.getArtwork(context, name, songId, albumId, true));
             songs.add(song);
           }
         }
@@ -306,6 +324,12 @@ public class MainViewActivity extends FragmentActivity implements SongListFragme
     mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
     singer.setText(songs.get(musicPosition).getSinger());
     songName.setText(songs.get(musicPosition).getName());
+    if (songs.get(musicPosition).getImage() == null) {
+      songs.get(musicPosition).setImage(
+          ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+              songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(), true));
+    }
+    songImage.setImageBitmap(songs.get(musicPosition).getImage());
     mMusicPlayerService.start();
   }
 

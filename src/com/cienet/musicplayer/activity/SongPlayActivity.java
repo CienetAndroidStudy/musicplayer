@@ -38,6 +38,7 @@ public class SongPlayActivity extends Activity {
   private TextView songName, singer, timeStart, timeEnd;
   private boolean isShuffle = false;// 是否随机播放
   private boolean isRepeat = false;// 是否循环播放
+  private boolean isPlaying = false;// 是否循环播放
   private static int musicPosition;
   private String tag;
   private Cursor mCursor;
@@ -134,6 +135,12 @@ public class SongPlayActivity extends Activity {
               mMusicPlayerService.reset();
             }
             musicPosition = musicPosition - 1;
+            if (songs.get(musicPosition).getImage() == null) {
+              songs.get(musicPosition).setImage(
+                  ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+                      songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(),
+                      true));
+            }
             playButton.setBackgroundResource(R.drawable.btn_playback_pause);
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
@@ -159,6 +166,12 @@ public class SongPlayActivity extends Activity {
               mMusicPlayerService.reset();
             }
             musicPosition = musicPosition + 1;
+            if (songs.get(musicPosition).getImage() == null) {
+              songs.get(musicPosition).setImage(
+                  ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+                      songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(),
+                      true));
+            }
             playButton.setBackgroundResource(R.drawable.btn_playback_pause);
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             singer.setText(songs.get(musicPosition).getSinger());
@@ -239,6 +252,7 @@ public class SongPlayActivity extends Activity {
     Bundle bundle = this.getIntent().getExtras();
     musicPosition = bundle.getInt("position");
     tag = bundle.getString("tag");
+    isPlaying = bundle.getBoolean("isPlaying");
 
     if ("SongListFragment".equals(tag)) {
       songs = new ArrayList<Song>();
@@ -265,7 +279,6 @@ public class SongPlayActivity extends Activity {
           song.setAlbumId(albumId);
           song.setSongId(songId);
           song.setDuration(duration);
-          song.setImage(ArtworkUtils.getArtwork(context, name, songId, albumId, true));
           songs.add(song);
         }
       }
@@ -280,9 +293,21 @@ public class SongPlayActivity extends Activity {
     songName.setText(songs.get(musicPosition).getName());
     singer.setText(songs.get(musicPosition).getSinger());
     timeEnd.setText(formatTime(songs.get(musicPosition).getDuration()));
+    if (songs.get(musicPosition).getImage() == null) {
+      songs.get(musicPosition).setImage(
+          ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+              songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(), true));
+    }
     albumImage.setImageBitmap(songs.get(musicPosition).getImage());
     // 获得歌曲的长度并设置成播放进度条的最大值
     seekBar.setMax((int) songs.get(musicPosition).getDuration());
+
+    albumImage.setImageBitmap(songs.get(musicPosition).getImage());
+    // 启动
+    handler.post(updateThread);
+    if (isPlaying) {
+      playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+    }
 
   }
 
@@ -297,7 +322,6 @@ public class SongPlayActivity extends Activity {
     // 设置淡入淡出效果
     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
   }
-
 
   private String formatTime(long time) {
     String min = time / (1000 * 60) + "";
@@ -318,4 +342,5 @@ public class SongPlayActivity extends Activity {
     }
     return min + ":" + sec.trim().substring(0, 2);
   }
+
 }
