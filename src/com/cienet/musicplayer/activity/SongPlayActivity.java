@@ -146,6 +146,8 @@ public class SongPlayActivity extends Activity {
             songName.setText(songs.get(musicPosition).getName());
             albumImage.setImageBitmap(songs.get(musicPosition).getImage());
             timeEnd.setText(formatTime(songs.get(musicPosition).getDuration()));
+            // 获得歌曲的长度并设置成播放进度条的最大值
+            seekBar.setMax((int) songs.get(musicPosition).getDuration());
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             mMusicPlayerService.start();
             // 启动
@@ -177,6 +179,8 @@ public class SongPlayActivity extends Activity {
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
             timeEnd.setText(formatTime(songs.get(musicPosition).getDuration()));
+            // 获得歌曲的长度并设置成播放进度条的最大值
+            seekBar.setMax((int) songs.get(musicPosition).getDuration());
             albumImage.setImageBitmap(songs.get(musicPosition).getImage());
             mMusicPlayerService.start();
             // 启动
