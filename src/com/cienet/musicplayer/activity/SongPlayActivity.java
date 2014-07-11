@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -141,7 +142,6 @@ public class SongPlayActivity extends Activity {
                       songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(),
                       true));
             }
-            playButton.setBackgroundResource(R.drawable.btn_playback_pause);
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
             albumImage.setImageBitmap(songs.get(musicPosition).getImage());
@@ -174,7 +174,6 @@ public class SongPlayActivity extends Activity {
                       songs.get(musicPosition).getSongId(), songs.get(musicPosition).getAlbumId(),
                       true));
             }
-            playButton.setBackgroundResource(R.drawable.btn_playback_pause);
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
@@ -234,7 +233,10 @@ public class SongPlayActivity extends Activity {
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {}
     });
-
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(MusicPlayService.PLAY_PREPARED_END);
+    filter.addAction(MusicPlayService.PLAY_COMPLETED);
+    registerReceiver(mPlayerEvtReceiver, filter);
   }
 
   private void initView() {

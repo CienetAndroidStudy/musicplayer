@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -99,14 +100,12 @@ public class MainViewActivity extends FragmentActivity implements
               mMusicPlayerService.reset();
             }
             musicPosition = musicPosition - 1;
-            playButton.setBackgroundResource(R.drawable.btn_playback_pause);
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             mMusicPlayerService.start();
           }
         } else {
-          playButton.setBackgroundResource(R.drawable.btn_playback_pause);
           singer.setText(songs.get(0).getSinger());
           songName.setText(songs.get(0).getName());
           if (songs.get(musicPosition).getImage() == null) {
@@ -133,7 +132,6 @@ public class MainViewActivity extends FragmentActivity implements
               mMusicPlayerService.reset();
             }
             musicPosition = musicPosition + 1;
-            playButton.setBackgroundResource(R.drawable.btn_playback_pause);
             mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
             singer.setText(songs.get(musicPosition).getSinger());
             songName.setText(songs.get(musicPosition).getName());
@@ -168,6 +166,10 @@ public class MainViewActivity extends FragmentActivity implements
       }
 
     });
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(MusicPlayService.PLAY_PREPARED_END);
+    filter.addAction(MusicPlayService.PLAY_COMPLETED);
+    registerReceiver(mPlayerEvtReceiver, filter);
   }
 
   /**
@@ -312,7 +314,6 @@ public class MainViewActivity extends FragmentActivity implements
   @Override
   public void onItemSelected(int position, String fragmentTag) {
     musicPosition = position;
-    playButton.setBackgroundResource(R.drawable.btn_playback_pause);
     mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
     singer.setText(songs.get(musicPosition).getSinger());
     songName.setText(songs.get(musicPosition).getName());
