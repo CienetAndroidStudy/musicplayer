@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/default_artwork"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/album"
+    <ImageButton
+        android:id="@+id/albumImage"
         android:layout_width="fill_parent"
-        android:layout_height="30sp"
-        android:layout_marginTop="100sp"
-        android:background="@color/black"
-        android:paddingLeft="8sp"
-        android:paddingTop="10sp"
-        android:text="@string/apollo_albums"
-        android:textColor="@color/white" />
+        android:layout_height="fill_parent"
+        android:background="@drawable/default_artwork"
+        tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/singer"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="30sp"
-        android:layout_gravity="center_vertical"
-        android:background="@color/black"
-        android:paddingLeft="8sp"
-        android:text="@string/singer"
-        android:textColor="@color/white" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/album"
+            android:layout_width="fill_parent"
+            android:layout_height="30sp"
+            android:layout_marginTop="100sp"
+            android:background="@color/black"
+            android:paddingLeft="8sp"
+            android:paddingTop="10sp"
+            android:text="@string/apollo_albums"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/singer"
+            android:layout_width="fill_parent"
+            android:layout_height="30sp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/black"
+            android:paddingLeft="8sp"
+            android:text="@string/singer"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</FrameLayout>
