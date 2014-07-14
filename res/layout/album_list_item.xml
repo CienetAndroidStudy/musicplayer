@@ -9,7 +9,9 @@
         android:id="@+id/albumImage"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/default_artwork"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_artwork"
         tools:ignore="ContentDescription" />
 
     <LinearLayout

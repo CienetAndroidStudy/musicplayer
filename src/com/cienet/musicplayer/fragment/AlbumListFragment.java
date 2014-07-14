@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -19,13 +21,16 @@ import android.widget.Toast;
 
 import com.cienet.musicplayer.R;
 import com.cienet.musicplayer.adapter.AlbumListAdapter;
+import com.cienet.musicplayer.util.ArtworkUtils;
 
 public class AlbumListFragment extends Fragment {
   private String[] albums;
   private GridView albumListView;
+  private Context context;
 
   @Override
   public void onAttach(Activity activity) {
+    context = this.getActivity();
     super.onAttach(activity);
   }
 
@@ -43,8 +48,8 @@ public class AlbumListFragment extends Fragment {
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 new String[] {MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DURATION,
                     MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
-                    MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME}, null, null,
-                MediaStore.Audio.Media.ALBUM);
+                    MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME,
+                    MediaStore.Audio.Media.ALBUM_ID}, null, null, MediaStore.Audio.Media.ALBUM);
     // If no media music
     if (c == null || c.getCount() == 0) {
       return;
@@ -54,15 +59,24 @@ public class AlbumListFragment extends Fragment {
     // Get music numbers
     int num = c.getCount();
     HashSet<String> alblumSet = new HashSet<String>();
-    HashMap<String, String> map = new HashMap<String, String>();
+    HashMap<String, String> singerMap = new HashMap<String, String>();
+    HashMap<String, Bitmap> imageMap = new HashMap<String, Bitmap>();
     for (int i = 0; i < num; i++) {
       // Get album name
       String album = c.getString(c.getColumnIndex(MediaStore.Audio.Media.ALBUM));
       String singer = c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-      map.put(album, singer);
+      long songId = c.getLong(c.getColumnIndex(MediaStore.Audio.Media._ID));
+      long albumId = c.getLong(c.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+      String name = c.getString((c.getColumnIndex(MediaStore.Audio.Media.TITLE)));
       alblumSet.add(album);
+      singerMap.put(album, singer);
+      if (!imageMap.containsKey(album)) {
+        Bitmap image = ArtworkUtils.getArtwork(context, name, songId, albumId, true);
+        imageMap.put(album, image);
+      }
       c.moveToNext();
     }
+
     num = alblumSet.size();
     Iterator<String> it = alblumSet.iterator();
     albums = new String[num];
@@ -72,7 +86,7 @@ public class AlbumListFragment extends Fragment {
       i++;
     }
     c.moveToFirst();
-    albumListView.setAdapter(new AlbumListAdapter(this.getActivity(), albums, map));
+    albumListView.setAdapter(new AlbumListAdapter(context, albums, singerMap, imageMap));
     albumListView.setOnItemClickListener(new AlbumsItemClickListener());
   }
 

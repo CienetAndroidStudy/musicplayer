@@ -3,6 +3,7 @@ package com.cienet.musicplayer.adapter;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,14 @@ public class AlbumListAdapter extends BaseAdapter {
   private Context context;
   private String[] albums;
   private HashMap<String, String> map;
+  private HashMap<String, Bitmap> imageMap;
 
-  public AlbumListAdapter(Context context, String[] albums, HashMap<String, String> map) {
+  public AlbumListAdapter(Context context, String[] albums, HashMap<String, String> map,
+      HashMap<String, Bitmap> imageMap) {
     this.context = context;
     this.albums = albums;
     this.map = map;
+    this.imageMap = imageMap;
   }
 
   @Override
@@ -54,7 +58,7 @@ public class AlbumListAdapter extends BaseAdapter {
       view = LayoutInflater.from(context).inflate(R.layout.album_list_item, null);
       viewHolder.albumSinger = (TextView) view.findViewById(R.id.singer);
       viewHolder.albumName = (TextView) view.findViewById(R.id.album);
-      // viewHolder.albumImage = (ImageView) view.findViewById(R.id.artist_item);
+      viewHolder.albumImage = (ImageView) view.findViewById(R.id.albumImage);
       view.setTag(viewHolder);
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
@@ -63,8 +67,7 @@ public class AlbumListAdapter extends BaseAdapter {
     viewHolder.albumSinger.setBackgroundColor(0x80000000);
     viewHolder.albumName.setText(albums[position]);
     viewHolder.albumName.setBackgroundColor(0x80000000);
-
-    // viewHolder.artistsItem.setImageResource(R.drawable.default_artwork);
+    viewHolder.albumImage.setImageBitmap(imageMap.get(albums[position]));
     return view;
   }
 
