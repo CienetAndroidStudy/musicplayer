@@ -169,7 +169,7 @@ public class MainViewActivity extends FragmentActivity implements
     IntentFilter filter = new IntentFilter();
     filter.addAction(MusicPlayService.PLAY_PREPARED_END);
     filter.addAction(MusicPlayService.PLAY_COMPLETED);
-    registerReceiver(mPlayerEvtReceiver, filter);
+    getApplicationContext().registerReceiver(mPlayerEvtReceiver, filter);
   }
 
   /**
@@ -325,5 +325,9 @@ public class MainViewActivity extends FragmentActivity implements
     songImage.setImageBitmap(songs.get(musicPosition).getImage());
     mMusicPlayerService.start();
   }
-
+  @Override
+  protected void onDestroy(){
+      super.onDestroy();
+      unbindService(mPlaybackConnection);
+  }
 }

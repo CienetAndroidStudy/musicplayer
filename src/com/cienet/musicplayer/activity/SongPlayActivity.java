@@ -236,7 +236,7 @@ public class SongPlayActivity extends Activity {
     IntentFilter filter = new IntentFilter();
     filter.addAction(MusicPlayService.PLAY_PREPARED_END);
     filter.addAction(MusicPlayService.PLAY_COMPLETED);
-    registerReceiver(mPlayerEvtReceiver, filter);
+    getApplicationContext().registerReceiver(mPlayerEvtReceiver, filter);
   }
 
   private void initView() {
@@ -320,6 +320,7 @@ public class SongPlayActivity extends Activity {
   @Override
   public void onDestroy() {
     super.onDestroy();
+    unbindService(mPlaybackConnection);
   }
 
   @Override
@@ -348,5 +349,4 @@ public class SongPlayActivity extends Activity {
     }
     return min + ":" + sec.trim().substring(0, 2);
   }
-
 }
