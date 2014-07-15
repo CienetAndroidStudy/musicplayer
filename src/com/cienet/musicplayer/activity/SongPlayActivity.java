@@ -67,15 +67,41 @@ public class SongPlayActivity extends Activity {
   protected BroadcastReceiver mPlayerEvtReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
-      Log.i(TAG, "BroadcastReceiver：" + intent.getAction());
       String action = intent.getAction();
-
-      if (action.equals(MusicPlayService.PLAY_PREPARED_END)) {
-        playButton.setBackgroundResource(R.drawable.btn_playback_pause);
-        Log.i(TAG, "PLAY_PREPARED_END");
-      } else if (action.equals(MusicPlayService.PLAY_COMPLETED)) {
-        playButton.setBackgroundResource(R.drawable.btn_playback_play);
-        Log.i(TAG, "PLAY_COMPLETED");
+      switch (action) {
+        case MusicPlayService.PLAY_PREPARED_END:
+          playButton.setBackgroundResource(R.drawable.btn_playback_pause);
+          break;
+        case MusicPlayService.PLAY_COMPLETED:
+          // Auto play the next song
+          playButton.setBackgroundResource(R.drawable.btn_playback_play);
+          if (musicPosition < songs.size()) {
+            if (mMusicPlayerService != null) {
+              if (mMusicPlayerService.isPlaying()) {
+                mMusicPlayerService.reset();
+              }
+              musicPosition = musicPosition + 1;
+              if (songs.get(musicPosition).getImage() == null) {
+                songs.get(musicPosition).setImage(
+                    ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+                        songs.get(musicPosition).getSongId(),
+                        songs.get(musicPosition).getAlbumId(), true));
+              }
+              mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
+              singer.setText(songs.get(musicPosition).getSinger());
+              songName.setText(songs.get(musicPosition).getName());
+              timeEnd.setText(formatTime(songs.get(musicPosition).getDuration()));
+              // 获得歌曲的长度并设置成播放进度条的最大值
+              seekBar.setMax((int) songs.get(musicPosition).getDuration());
+              albumImage.setImageBitmap(songs.get(musicPosition).getImage());
+              mMusicPlayerService.start();
+              // 启动
+              handler.post(updateThread);
+            }
+          }
+          break;
+        default:
+          break;
       }
     }
   };

@@ -57,6 +57,7 @@ public class MainViewActivity extends FragmentActivity implements
   private List<Song> songs;
   private Cursor mCursor;
   private Context context;
+
   // private final static String AlbumListFragment = "AlbumListFragment";
   // private final static String ArtistListFragment = "ArtistListFragment";
 
@@ -196,7 +197,27 @@ public class MainViewActivity extends FragmentActivity implements
           playButton.setBackgroundResource(R.drawable.btn_playback_pause);
           break;
         case MusicPlayService.PLAY_COMPLETED:
+          // Auto play the next song
           playButton.setBackgroundResource(R.drawable.btn_playback_play);
+          if (musicPosition < songs.size()) {
+            if (mMusicPlayerService != null) {
+              if (mMusicPlayerService.isPlaying()) {
+                mMusicPlayerService.reset();
+              }
+              musicPosition = musicPosition + 1;
+              mMusicPlayerService.setDataSource(songs.get(musicPosition).getUrl());
+              singer.setText(songs.get(musicPosition).getSinger());
+              songName.setText(songs.get(musicPosition).getName());
+              if (songs.get(musicPosition).getImage() == null) {
+                songs.get(musicPosition).setImage(
+                    ArtworkUtils.getArtwork(context, songs.get(musicPosition).getName(),
+                        songs.get(musicPosition).getSongId(),
+                        songs.get(musicPosition).getAlbumId(), true));
+              }
+              songImage.setImageBitmap(songs.get(musicPosition).getImage());
+              mMusicPlayerService.start();
+            }
+          }
           break;
         default:
           break;
@@ -325,9 +346,10 @@ public class MainViewActivity extends FragmentActivity implements
     songImage.setImageBitmap(songs.get(musicPosition).getImage());
     mMusicPlayerService.start();
   }
+
   @Override
-  protected void onDestroy(){
-      super.onDestroy();
-      unbindService(mPlaybackConnection);
+  protected void onDestroy() {
+    super.onDestroy();
+    unbindService(mPlaybackConnection);
   }
 }
